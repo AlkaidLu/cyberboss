@@ -138,6 +138,9 @@ async function getUpdates(params) {
     if (error instanceof Error && error.name === "AbortError") {
       return { ret: 0, msgs: [], get_updates_buf: params.get_updates_buf || "" };
     }
+    if (String(error?.message || "").includes("request timed out after")) {
+      return { ret: 0, msgs: [], get_updates_buf: params.get_updates_buf || "" };
+    }
     throw error;
   }
 }

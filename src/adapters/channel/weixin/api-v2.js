@@ -125,7 +125,8 @@ async function getUpdatesV2({ baseUrl, token, getUpdatesBuf = "", timeoutMs = DE
     if (error instanceof Error && error.name === "AbortError") {
       return { ret: 0, msgs: [], get_updates_buf: getUpdatesBuf };
     }
-    if (String(error?.message || "").includes("aborted")) {
+    const message = String(error?.message || "");
+    if (message.includes("aborted") || message.includes("request timed out after")) {
       return { ret: 0, msgs: [], get_updates_buf: getUpdatesBuf };
     }
     throw error;
