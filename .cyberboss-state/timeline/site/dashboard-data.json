@@ -1,0 +1,3291 @@
+{
+  "meta": {
+    "generatedAt": "2026-04-13T05:28:08.513Z",
+    "updatedAt": "2026-04-13T05:26:46.187Z",
+    "taxonomyUpdatedAt": "2026-04-13T05:23:51.054Z",
+    "factsUpdatedAt": "2026-04-13T05:26:46.187Z",
+    "isDemoData": false,
+    "timezone": "Asia/Shanghai",
+    "locale": "zh-CN",
+    "availableDates": [
+      "2026-04-12",
+      "2026-04-13"
+    ],
+    "latestDate": "2026-04-13"
+  },
+  "taxonomy": {
+    "categories": [
+      {
+        "id": "life",
+        "label": "生活",
+        "color": "var(--cat-life)",
+        "children": [
+          {
+            "id": "life.meal",
+            "label": "吃饭"
+          },
+          {
+            "id": "life.hygiene",
+            "label": "洗漱"
+          },
+          {
+            "id": "life.chores",
+            "label": "家务"
+          },
+          {
+            "id": "life.shopping",
+            "label": "购物"
+          },
+          {
+            "id": "life.errand",
+            "label": "办事"
+          },
+          {
+            "id": "life.other",
+            "label": "其他生活"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "label": "工作",
+        "color": "var(--cat-work)",
+        "children": [
+          {
+            "id": "work.coding",
+            "label": "编码"
+          },
+          {
+            "id": "work.meeting",
+            "label": "会议"
+          },
+          {
+            "id": "work.writing",
+            "label": "写作"
+          },
+          {
+            "id": "work.communication",
+            "label": "沟通"
+          },
+          {
+            "id": "work.other",
+            "label": "其他工作"
+          }
+        ]
+      },
+      {
+        "id": "study",
+        "label": "学习",
+        "color": "var(--cat-study)",
+        "children": [
+          {
+            "id": "study.reading",
+            "label": "阅读"
+          },
+          {
+            "id": "study.course",
+            "label": "课程"
+          },
+          {
+            "id": "study.practice",
+            "label": "练习"
+          },
+          {
+            "id": "study.review",
+            "label": "复盘"
+          },
+          {
+            "id": "study.other",
+            "label": "其他学习"
+          }
+        ]
+      },
+      {
+        "id": "exercise",
+        "label": "运动",
+        "color": "var(--cat-exercise)",
+        "children": [
+          {
+            "id": "exercise.walk",
+            "label": "散步"
+          },
+          {
+            "id": "exercise.workout",
+            "label": "锻炼"
+          },
+          {
+            "id": "exercise.stretch",
+            "label": "拉伸"
+          },
+          {
+            "id": "exercise.other",
+            "label": "其他运动"
+          }
+        ]
+      },
+      {
+        "id": "entertainment",
+        "label": "娱乐",
+        "color": "var(--cat-entertainment)",
+        "children": [
+          {
+            "id": "entertainment.video",
+            "label": "视频"
+          },
+          {
+            "id": "entertainment.game",
+            "label": "游戏"
+          },
+          {
+            "id": "entertainment.social_media",
+            "label": "社交媒体"
+          },
+          {
+            "id": "entertainment.music",
+            "label": "音乐"
+          },
+          {
+            "id": "entertainment.other",
+            "label": "其他娱乐"
+          }
+        ]
+      },
+      {
+        "id": "health",
+        "label": "健康",
+        "color": "var(--cat-health)",
+        "children": [
+          {
+            "id": "health.rest",
+            "label": "恢复休息"
+          },
+          {
+            "id": "health.medication",
+            "label": "用药"
+          },
+          {
+            "id": "health.pain",
+            "label": "症状处理"
+          },
+          {
+            "id": "health.hospital",
+            "label": "就医"
+          },
+          {
+            "id": "health.other",
+            "label": "其他健康"
+          }
+        ]
+      },
+      {
+        "id": "social",
+        "label": "社交",
+        "color": "var(--cat-social)",
+        "children": [
+          {
+            "id": "social.chat",
+            "label": "聊天"
+          },
+          {
+            "id": "social.call",
+            "label": "通话"
+          },
+          {
+            "id": "social.family",
+            "label": "家人相处"
+          },
+          {
+            "id": "social.other",
+            "label": "其他社交"
+          }
+        ]
+      },
+      {
+        "id": "care",
+        "label": "照料",
+        "color": "var(--cat-care)",
+        "children": [
+          {
+            "id": "care.pet",
+            "label": "宠物照料"
+          },
+          {
+            "id": "care.household",
+            "label": "家庭照料"
+          },
+          {
+            "id": "care.self",
+            "label": "自我照料"
+          },
+          {
+            "id": "care.other",
+            "label": "其他照料"
+          }
+        ]
+      },
+      {
+        "id": "travel",
+        "label": "出行",
+        "color": "var(--cat-travel)",
+        "children": [
+          {
+            "id": "travel.commute",
+            "label": "通勤"
+          },
+          {
+            "id": "travel.transit",
+            "label": "路程"
+          },
+          {
+            "id": "travel.other",
+            "label": "其他出行"
+          }
+        ]
+      },
+      {
+        "id": "rest",
+        "label": "休息",
+        "color": "var(--cat-rest)",
+        "children": [
+          {
+            "id": "rest.sleep",
+            "label": "睡眠"
+          },
+          {
+            "id": "rest.nap",
+            "label": "小睡"
+          },
+          {
+            "id": "rest.idle",
+            "label": "发呆"
+          },
+          {
+            "id": "rest.other",
+            "label": "其他休息"
+          }
+        ]
+      }
+    ],
+    "eventNodes": [
+      {
+        "id": "evt.breakfast",
+        "label": "Breakfast",
+        "aliases": [
+          "breakfast",
+          "morning meal"
+        ],
+        "parentId": "life.meal",
+        "status": "official"
+      },
+      {
+        "id": "evt.lunch",
+        "label": "Lunch",
+        "aliases": [
+          "lunch",
+          "midday meal"
+        ],
+        "parentId": "life.meal",
+        "status": "official"
+      },
+      {
+        "id": "evt.dinner",
+        "label": "Dinner",
+        "aliases": [
+          "dinner",
+          "evening meal"
+        ],
+        "parentId": "life.meal",
+        "status": "official"
+      },
+      {
+        "id": "evt.shower",
+        "label": "Shower",
+        "aliases": [
+          "shower",
+          "wash up"
+        ],
+        "parentId": "life.hygiene",
+        "status": "official"
+      },
+      {
+        "id": "evt.cleanup",
+        "label": "Cleanup",
+        "aliases": [
+          "room reset",
+          "tidying up"
+        ],
+        "parentId": "life.chores",
+        "status": "official"
+      },
+      {
+        "id": "evt.commute",
+        "label": "Commute",
+        "aliases": [
+          "commute",
+          "ride to work",
+          "ride home"
+        ],
+        "parentId": "travel.commute",
+        "status": "official"
+      },
+      {
+        "id": "evt.focus_coding",
+        "label": "Focused Coding",
+        "aliases": [
+          "coding",
+          "shipping code",
+          "implementation"
+        ],
+        "parentId": "work.coding",
+        "status": "official"
+      },
+      {
+        "id": "evt.meeting",
+        "label": "Meeting",
+        "aliases": [
+          "meeting",
+          "sync"
+        ],
+        "parentId": "work.meeting",
+        "status": "official"
+      },
+      {
+        "id": "evt.reading",
+        "label": "Reading",
+        "aliases": [
+          "reading",
+          "read a book"
+        ],
+        "parentId": "study.reading",
+        "status": "official"
+      },
+      {
+        "id": "evt.learning",
+        "label": "Course Study",
+        "aliases": [
+          "course",
+          "studying",
+          "lesson"
+        ],
+        "parentId": "study.course",
+        "status": "official"
+      },
+      {
+        "id": "evt.walk",
+        "label": "Walk",
+        "aliases": [
+          "walk",
+          "go for a walk"
+        ],
+        "parentId": "exercise.walk",
+        "status": "official"
+      },
+      {
+        "id": "evt.workout",
+        "label": "Workout",
+        "aliases": [
+          "workout",
+          "training"
+        ],
+        "parentId": "exercise.workout",
+        "status": "official"
+      },
+      {
+        "id": "evt.watch_show",
+        "label": "Watch a Show",
+        "aliases": [
+          "watching a show",
+          "tv time"
+        ],
+        "parentId": "entertainment.video",
+        "status": "official"
+      },
+      {
+        "id": "evt.short_video",
+        "label": "Short Video Scroll",
+        "aliases": [
+          "short videos",
+          "reels",
+          "scrolling videos"
+        ],
+        "parentId": "entertainment.social_media",
+        "status": "official"
+      },
+      {
+        "id": "evt.phone_scroll",
+        "label": "Phone Scroll",
+        "aliases": [
+          "phone scrolling",
+          "doomscrolling"
+        ],
+        "parentId": "entertainment.social_media",
+        "status": "official"
+      },
+      {
+        "id": "evt.headache_rest",
+        "label": "Headache Recovery",
+        "aliases": [
+          "resting with a headache"
+        ],
+        "parentId": "health.rest",
+        "status": "official"
+      },
+      {
+        "id": "evt.medication",
+        "label": "Medication",
+        "aliases": [
+          "taking medicine",
+          "medication"
+        ],
+        "parentId": "health.medication",
+        "status": "official"
+      },
+      {
+        "id": "evt.hospital_visit",
+        "label": "Medical Visit",
+        "aliases": [
+          "clinic visit",
+          "hospital visit",
+          "doctor appointment"
+        ],
+        "parentId": "health.hospital",
+        "status": "official"
+      },
+      {
+        "id": "evt.chatting",
+        "label": "Chat",
+        "aliases": [
+          "chatting",
+          "replying to messages"
+        ],
+        "parentId": "social.chat",
+        "status": "official"
+      },
+      {
+        "id": "evt.sleep",
+        "label": "Sleep",
+        "aliases": [
+          "sleep",
+          "went to sleep"
+        ],
+        "parentId": "rest.sleep",
+        "status": "official"
+      },
+      {
+        "id": "evt.nap",
+        "label": "Nap",
+        "aliases": [
+          "nap",
+          "power nap"
+        ],
+        "parentId": "rest.nap",
+        "status": "official"
+      }
+    ]
+  },
+  "timelines": {
+    "day": {
+      "2026-04-12": {
+        "date": "2026-04-12",
+        "start": "2026-04-12T00:00:00.000+08:00",
+        "end": "2026-04-12T23:59:59.999+08:00",
+        "groups": [],
+        "items": [
+          {
+            "id": "wechat-checkin-2026-04-12-1458",
+            "start": "2026-04-12T06:58:00.000Z",
+            "end": "2026-04-12T07:01:00.000Z",
+            "content": "????? | 3m",
+            "style": "background:var(--cat-social);border-color:var(--cat-social);color:var(--text);",
+            "tooltip": {
+              "title": "?????",
+              "note": "???????????????????????????????????????????????",
+              "color": "var(--cat-social)",
+              "durationText": "3分钟",
+              "timeText": "14:58 - 15:01"
+            },
+            "className": "cat-social"
+          },
+          {
+            "id": "wechat-tone-correction-2026-04-12-1635",
+            "start": "2026-04-12T08:35:00.000Z",
+            "end": "2026-04-12T08:37:00.000Z",
+            "content": "Corrected apology tone | 2m",
+            "style": "background:var(--cat-social);border-color:var(--cat-social);color:var(--text);",
+            "tooltip": {
+              "title": "Corrected apology tone",
+              "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+              "color": "var(--cat-social)",
+              "durationText": "2分钟",
+              "timeText": "16:35 - 16:37"
+            },
+            "className": "cat-social"
+          },
+          {
+            "id": "wechat-takeout-plan-2026-04-12-1654",
+            "start": "2026-04-12T08:54:00.000Z",
+            "end": "2026-04-12T08:55:00.000Z",
+            "content": "Planning takeout dinner | 1m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "Planning takeout dinner",
+              "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+              "color": "var(--cat-life)",
+              "durationText": "1分钟",
+              "timeText": "16:54 - 16:55"
+            },
+            "className": "cat-life"
+          }
+        ]
+      },
+      "2026-04-13": {
+        "date": "2026-04-13",
+        "start": "2026-04-13T00:00:00.000+08:00",
+        "end": "2026-04-13T23:59:59.999+08:00",
+        "groups": [],
+        "items": [
+          {
+            "id": "wechat-lab-plan-2026-04-13-0949",
+            "start": "2026-04-13T01:49:00.000Z",
+            "end": "2026-04-13T01:50:00.000Z",
+            "content": "想赶去实验室 | 1m",
+            "style": "background:var(--cat-study);border-color:var(--cat-study);color:var(--text);",
+            "tooltip": {
+              "title": "想赶去实验室",
+              "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+              "color": "var(--cat-study)",
+              "durationText": "1分钟",
+              "timeText": "09:49 - 09:50"
+            },
+            "className": "cat-study"
+          },
+          {
+            "id": "wechat-phone-time-2026-04-13-0949",
+            "start": "2026-04-13T01:49:00.000Z",
+            "end": "2026-04-13T03:20:00.000Z",
+            "content": "手机时间一路滑到十一点二十 | 1h31m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "手机时间一路滑到十一点二十",
+              "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+              "color": "var(--cat-life)",
+              "durationText": "1小时31分钟",
+              "timeText": "09:49 - 11:20"
+            },
+            "className": "cat-life"
+          },
+          {
+            "id": "wechat-dressed-up-2026-04-13-1120",
+            "start": "2026-04-13T03:20:00.000Z",
+            "end": "2026-04-13T03:25:00.000Z",
+            "content": "换好衣服洗漱完 | 5m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "换好衣服洗漱完",
+              "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+              "color": "var(--cat-life)",
+              "durationText": "5分钟",
+              "timeText": "11:20 - 11:25"
+            },
+            "className": "cat-life"
+          }
+        ]
+      }
+    },
+    "week": {
+      "2026-04-06": {
+        "key": "2026-04-06",
+        "label": "2026-04-06 当周",
+        "start": "2000-01-01T00:00:00.000+08:00",
+        "end": "2000-01-01T23:59:59.999+08:00",
+        "groups": [
+          {
+            "id": "2026-04-06",
+            "content": "周一"
+          },
+          {
+            "id": "2026-04-07",
+            "content": "周二"
+          },
+          {
+            "id": "2026-04-08",
+            "content": "周三"
+          },
+          {
+            "id": "2026-04-09",
+            "content": "周四"
+          },
+          {
+            "id": "2026-04-10",
+            "content": "周五"
+          },
+          {
+            "id": "2026-04-11",
+            "content": "周六"
+          },
+          {
+            "id": "2026-04-12",
+            "content": "周日"
+          }
+        ],
+        "items": [
+          {
+            "id": "2026-04-12:wechat-checkin-2026-04-12-1458",
+            "group": "2026-04-12",
+            "start": "2000-01-01T14:58:00+08:00",
+            "end": "2000-01-01T15:01:00+08:00",
+            "content": "????? | 3m",
+            "style": "background:var(--cat-social);border-color:var(--cat-social);color:var(--text);",
+            "tooltip": {
+              "title": "?????",
+              "note": "???????????????????????????????????????????????",
+              "color": "var(--cat-social)",
+              "durationText": "3分钟",
+              "timeText": "14:58 - 15:01",
+              "dateText": "2026-04-12"
+            },
+            "className": "cat-social"
+          },
+          {
+            "id": "2026-04-12:wechat-tone-correction-2026-04-12-1635",
+            "group": "2026-04-12",
+            "start": "2000-01-01T16:35:00+08:00",
+            "end": "2000-01-01T16:37:00+08:00",
+            "content": "Corrected apology tone | 2m",
+            "style": "background:var(--cat-social);border-color:var(--cat-social);color:var(--text);",
+            "tooltip": {
+              "title": "Corrected apology tone",
+              "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+              "color": "var(--cat-social)",
+              "durationText": "2分钟",
+              "timeText": "16:35 - 16:37",
+              "dateText": "2026-04-12"
+            },
+            "className": "cat-social"
+          },
+          {
+            "id": "2026-04-12:wechat-takeout-plan-2026-04-12-1654",
+            "group": "2026-04-12",
+            "start": "2000-01-01T16:54:00+08:00",
+            "end": "2000-01-01T16:55:00+08:00",
+            "content": "Planning takeout dinner | 1m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "Planning takeout dinner",
+              "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+              "color": "var(--cat-life)",
+              "durationText": "1分钟",
+              "timeText": "16:54 - 16:55",
+              "dateText": "2026-04-12"
+            },
+            "className": "cat-life"
+          }
+        ]
+      },
+      "2026-04-13": {
+        "key": "2026-04-13",
+        "label": "2026-04-13 当周",
+        "start": "2000-01-01T00:00:00.000+08:00",
+        "end": "2000-01-01T23:59:59.999+08:00",
+        "groups": [
+          {
+            "id": "2026-04-13",
+            "content": "周一"
+          },
+          {
+            "id": "2026-04-14",
+            "content": "周二"
+          },
+          {
+            "id": "2026-04-15",
+            "content": "周三"
+          },
+          {
+            "id": "2026-04-16",
+            "content": "周四"
+          },
+          {
+            "id": "2026-04-17",
+            "content": "周五"
+          },
+          {
+            "id": "2026-04-18",
+            "content": "周六"
+          },
+          {
+            "id": "2026-04-19",
+            "content": "周日"
+          }
+        ],
+        "items": [
+          {
+            "id": "2026-04-13:wechat-lab-plan-2026-04-13-0949",
+            "group": "2026-04-13",
+            "start": "2000-01-01T09:49:00+08:00",
+            "end": "2000-01-01T09:50:00+08:00",
+            "content": "想赶去实验室 | 1m",
+            "style": "background:var(--cat-study);border-color:var(--cat-study);color:var(--text);",
+            "tooltip": {
+              "title": "想赶去实验室",
+              "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+              "color": "var(--cat-study)",
+              "durationText": "1分钟",
+              "timeText": "09:49 - 09:50",
+              "dateText": "2026-04-13"
+            },
+            "className": "cat-study"
+          },
+          {
+            "id": "2026-04-13:wechat-phone-time-2026-04-13-0949",
+            "group": "2026-04-13",
+            "start": "2000-01-01T09:49:00+08:00",
+            "end": "2000-01-01T11:20:00+08:00",
+            "content": "手机时间一路滑到十一点二十 | 1h31m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "手机时间一路滑到十一点二十",
+              "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+              "color": "var(--cat-life)",
+              "durationText": "1小时31分钟",
+              "timeText": "09:49 - 11:20",
+              "dateText": "2026-04-13"
+            },
+            "className": "cat-life"
+          },
+          {
+            "id": "2026-04-13:wechat-dressed-up-2026-04-13-1120",
+            "group": "2026-04-13",
+            "start": "2000-01-01T11:20:00+08:00",
+            "end": "2000-01-01T11:25:00+08:00",
+            "content": "换好衣服洗漱完 | 5m",
+            "style": "background:var(--cat-life);border-color:var(--cat-life);color:var(--text);",
+            "tooltip": {
+              "title": "换好衣服洗漱完",
+              "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+              "color": "var(--cat-life)",
+              "durationText": "5分钟",
+              "timeText": "11:20 - 11:25",
+              "dateText": "2026-04-13"
+            },
+            "className": "cat-life"
+          }
+        ]
+      }
+    }
+  },
+  "ranges": {
+    "day": {
+      "2026-04-12": {
+        "key": "2026-04-12",
+        "label": "2026-04-12",
+        "unit": "hour",
+        "totalMinutes": 6,
+        "categories": [
+          {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "minutes": 5,
+            "percent": 0.8333
+          },
+          {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "minutes": 1,
+            "percent": 0.1667
+          }
+        ],
+        "categoryDetails": {
+          "social": {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 0
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 2
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 1
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 2
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "social.chat",
+                "categoryId": "social",
+                "label": "聊天",
+                "color": "var(--cat-social)",
+                "minutes": 5,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "life": {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 0
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 1
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "life.dinner",
+                "categoryId": "life",
+                "label": "life.dinner",
+                "color": "var(--cat-life)",
+                "minutes": 1,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              }
+            ]
+          }
+        },
+        "subcategoryDetails": {
+          "social.chat": {
+            "subcategoryId": "social.chat",
+            "categoryId": "social",
+            "label": "聊天",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 0
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 2
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 1
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 2
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "life.dinner": {
+            "subcategoryId": "life.dinner",
+            "categoryId": "life",
+            "label": "life.dinner",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 0
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 1
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              }
+            ]
+          }
+        }
+      },
+      "2026-04-13": {
+        "key": "2026-04-13",
+        "label": "2026-04-13",
+        "unit": "hour",
+        "totalMinutes": 97,
+        "categories": [
+          {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "minutes": 96,
+            "percent": 0.9897
+          },
+          {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "minutes": 1,
+            "percent": 0.0103
+          }
+        ],
+        "categoryDetails": {
+          "life": {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 11
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 60
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 25
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 0
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "life.other",
+                "categoryId": "life",
+                "label": "其他生活",
+                "color": "var(--cat-life)",
+                "minutes": 91,
+                "percent": 0.9479
+              },
+              {
+                "subcategoryId": "life.hygiene",
+                "categoryId": "life",
+                "label": "洗漱",
+                "color": "var(--cat-life)",
+                "minutes": 5,
+                "percent": 0.0521
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              },
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          },
+          "study": {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 1
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 0
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "study.other",
+                "categoryId": "study",
+                "label": "其他学习",
+                "color": "var(--cat-study)",
+                "minutes": 1,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          }
+        },
+        "subcategoryDetails": {
+          "study.other": {
+            "subcategoryId": "study.other",
+            "categoryId": "study",
+            "label": "其他学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 1
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 0
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 0
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          },
+          "life.other": {
+            "subcategoryId": "life.other",
+            "categoryId": "life",
+            "label": "其他生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 11
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 60
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 20
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 0
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              }
+            ]
+          },
+          "life.hygiene": {
+            "subcategoryId": "life.hygiene",
+            "categoryId": "life",
+            "label": "洗漱",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "0",
+                "label": "00:00",
+                "minutes": 0
+              },
+              {
+                "key": "1",
+                "label": "01:00",
+                "minutes": 0
+              },
+              {
+                "key": "2",
+                "label": "02:00",
+                "minutes": 0
+              },
+              {
+                "key": "3",
+                "label": "03:00",
+                "minutes": 0
+              },
+              {
+                "key": "4",
+                "label": "04:00",
+                "minutes": 0
+              },
+              {
+                "key": "5",
+                "label": "05:00",
+                "minutes": 0
+              },
+              {
+                "key": "6",
+                "label": "06:00",
+                "minutes": 0
+              },
+              {
+                "key": "7",
+                "label": "07:00",
+                "minutes": 0
+              },
+              {
+                "key": "8",
+                "label": "08:00",
+                "minutes": 0
+              },
+              {
+                "key": "9",
+                "label": "09:00",
+                "minutes": 0
+              },
+              {
+                "key": "10",
+                "label": "10:00",
+                "minutes": 0
+              },
+              {
+                "key": "11",
+                "label": "11:00",
+                "minutes": 5
+              },
+              {
+                "key": "12",
+                "label": "12:00",
+                "minutes": 0
+              },
+              {
+                "key": "13",
+                "label": "13:00",
+                "minutes": 0
+              },
+              {
+                "key": "14",
+                "label": "14:00",
+                "minutes": 0
+              },
+              {
+                "key": "15",
+                "label": "15:00",
+                "minutes": 0
+              },
+              {
+                "key": "16",
+                "label": "16:00",
+                "minutes": 0
+              },
+              {
+                "key": "17",
+                "label": "17:00",
+                "minutes": 0
+              },
+              {
+                "key": "18",
+                "label": "18:00",
+                "minutes": 0
+              },
+              {
+                "key": "19",
+                "label": "19:00",
+                "minutes": 0
+              },
+              {
+                "key": "20",
+                "label": "20:00",
+                "minutes": 0
+              },
+              {
+                "key": "21",
+                "label": "21:00",
+                "minutes": 0
+              },
+              {
+                "key": "22",
+                "label": "22:00",
+                "minutes": 0
+              },
+              {
+                "key": "23",
+                "label": "23:00",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          }
+        }
+      }
+    },
+    "week": {
+      "2026-04-06": {
+        "key": "2026-04-06",
+        "label": "2026-04-06 当周",
+        "unit": "day",
+        "totalMinutes": 6,
+        "categories": [
+          {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "minutes": 5,
+            "percent": 0.8333
+          },
+          {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "minutes": 1,
+            "percent": 0.1667
+          }
+        ],
+        "categoryDetails": {
+          "social": {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "label": "04-06",
+                "key": "2026-04-06",
+                "minutes": 0
+              },
+              {
+                "label": "04-07",
+                "key": "2026-04-07",
+                "minutes": 0
+              },
+              {
+                "label": "04-08",
+                "key": "2026-04-08",
+                "minutes": 0
+              },
+              {
+                "label": "04-09",
+                "key": "2026-04-09",
+                "minutes": 0
+              },
+              {
+                "label": "04-10",
+                "key": "2026-04-10",
+                "minutes": 0
+              },
+              {
+                "label": "04-11",
+                "key": "2026-04-11",
+                "minutes": 0
+              },
+              {
+                "label": "04-12",
+                "key": "2026-04-12",
+                "minutes": 5
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "social.chat",
+                "categoryId": "social",
+                "label": "聊天",
+                "color": "var(--cat-social)",
+                "minutes": 5,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "04-12",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "04-12 14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "04-12",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "04-12 16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "life": {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "label": "04-06",
+                "key": "2026-04-06",
+                "minutes": 0
+              },
+              {
+                "label": "04-07",
+                "key": "2026-04-07",
+                "minutes": 0
+              },
+              {
+                "label": "04-08",
+                "key": "2026-04-08",
+                "minutes": 0
+              },
+              {
+                "label": "04-09",
+                "key": "2026-04-09",
+                "minutes": 0
+              },
+              {
+                "label": "04-10",
+                "key": "2026-04-10",
+                "minutes": 0
+              },
+              {
+                "label": "04-11",
+                "key": "2026-04-11",
+                "minutes": 0
+              },
+              {
+                "label": "04-12",
+                "key": "2026-04-12",
+                "minutes": 1
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "life.dinner",
+                "categoryId": "life",
+                "label": "life.dinner",
+                "color": "var(--cat-life)",
+                "minutes": 1,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "04-12",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "04-12 16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              }
+            ]
+          }
+        },
+        "subcategoryDetails": {
+          "social.chat": {
+            "subcategoryId": "social.chat",
+            "categoryId": "social",
+            "label": "聊天",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "key": "2026-04-06",
+                "label": "04-06",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-07",
+                "label": "04-07",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-08",
+                "label": "04-08",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-09",
+                "label": "04-09",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-10",
+                "label": "04-10",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-11",
+                "label": "04-11",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 5
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "04-12",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "04-12 14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "04-12",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "04-12 16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "life.dinner": {
+            "subcategoryId": "life.dinner",
+            "categoryId": "life",
+            "label": "life.dinner",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-06",
+                "label": "04-06",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-07",
+                "label": "04-07",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-08",
+                "label": "04-08",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-09",
+                "label": "04-09",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-10",
+                "label": "04-10",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-11",
+                "label": "04-11",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "04-12",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "04-12 16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              }
+            ]
+          }
+        }
+      },
+      "2026-04-13": {
+        "key": "2026-04-13",
+        "label": "2026-04-13 当周",
+        "unit": "day",
+        "totalMinutes": 97,
+        "categories": [
+          {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "minutes": 96,
+            "percent": 0.9897
+          },
+          {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "minutes": 1,
+            "percent": 0.0103
+          }
+        ],
+        "categoryDetails": {
+          "life": {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "label": "04-13",
+                "key": "2026-04-13",
+                "minutes": 96
+              },
+              {
+                "label": "04-14",
+                "key": "2026-04-14",
+                "minutes": 0
+              },
+              {
+                "label": "04-15",
+                "key": "2026-04-15",
+                "minutes": 0
+              },
+              {
+                "label": "04-16",
+                "key": "2026-04-16",
+                "minutes": 0
+              },
+              {
+                "label": "04-17",
+                "key": "2026-04-17",
+                "minutes": 0
+              },
+              {
+                "label": "04-18",
+                "key": "2026-04-18",
+                "minutes": 0
+              },
+              {
+                "label": "04-19",
+                "key": "2026-04-19",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "life.other",
+                "categoryId": "life",
+                "label": "其他生活",
+                "color": "var(--cat-life)",
+                "minutes": 91,
+                "percent": 0.9479
+              },
+              {
+                "subcategoryId": "life.hygiene",
+                "categoryId": "life",
+                "label": "洗漱",
+                "color": "var(--cat-life)",
+                "minutes": 5,
+                "percent": 0.0521
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "04-13 09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              },
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "04-13",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "04-13 11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          },
+          "study": {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "label": "04-13",
+                "key": "2026-04-13",
+                "minutes": 1
+              },
+              {
+                "label": "04-14",
+                "key": "2026-04-14",
+                "minutes": 0
+              },
+              {
+                "label": "04-15",
+                "key": "2026-04-15",
+                "minutes": 0
+              },
+              {
+                "label": "04-16",
+                "key": "2026-04-16",
+                "minutes": 0
+              },
+              {
+                "label": "04-17",
+                "key": "2026-04-17",
+                "minutes": 0
+              },
+              {
+                "label": "04-18",
+                "key": "2026-04-18",
+                "minutes": 0
+              },
+              {
+                "label": "04-19",
+                "key": "2026-04-19",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "study.other",
+                "categoryId": "study",
+                "label": "其他学习",
+                "color": "var(--cat-study)",
+                "minutes": 1,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "04-13 09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          }
+        },
+        "subcategoryDetails": {
+          "study.other": {
+            "subcategoryId": "study.other",
+            "categoryId": "study",
+            "label": "其他学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 1
+              },
+              {
+                "key": "2026-04-14",
+                "label": "04-14",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-15",
+                "label": "04-15",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-16",
+                "label": "04-16",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-17",
+                "label": "04-17",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-18",
+                "label": "04-18",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-19",
+                "label": "04-19",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "04-13 09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          },
+          "life.other": {
+            "subcategoryId": "life.other",
+            "categoryId": "life",
+            "label": "其他生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 91
+              },
+              {
+                "key": "2026-04-14",
+                "label": "04-14",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-15",
+                "label": "04-15",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-16",
+                "label": "04-16",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-17",
+                "label": "04-17",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-18",
+                "label": "04-18",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-19",
+                "label": "04-19",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "04-13 09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              }
+            ]
+          },
+          "life.hygiene": {
+            "subcategoryId": "life.hygiene",
+            "categoryId": "life",
+            "label": "洗漱",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 5
+              },
+              {
+                "key": "2026-04-14",
+                "label": "04-14",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-15",
+                "label": "04-15",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-16",
+                "label": "04-16",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-17",
+                "label": "04-17",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-18",
+                "label": "04-18",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-19",
+                "label": "04-19",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "04-13",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "04-13 11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          }
+        }
+      }
+    },
+    "month": {
+      "2026-04": {
+        "key": "2026-04",
+        "label": "2026-04",
+        "unit": "day",
+        "totalMinutes": 103,
+        "categories": [
+          {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "minutes": 97,
+            "percent": 0.9417
+          },
+          {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "minutes": 5,
+            "percent": 0.0485
+          },
+          {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "minutes": 1,
+            "percent": 0.0097
+          }
+        ],
+        "categoryDetails": {
+          "life": {
+            "categoryId": "life",
+            "label": "生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "label": "04-12",
+                "key": "2026-04-12",
+                "minutes": 1
+              },
+              {
+                "label": "04-13",
+                "key": "2026-04-13",
+                "minutes": 96
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "life.other",
+                "categoryId": "life",
+                "label": "其他生活",
+                "color": "var(--cat-life)",
+                "minutes": 91,
+                "percent": 0.9381
+              },
+              {
+                "subcategoryId": "life.hygiene",
+                "categoryId": "life",
+                "label": "洗漱",
+                "color": "var(--cat-life)",
+                "minutes": 5,
+                "percent": 0.0515
+              },
+              {
+                "subcategoryId": "life.dinner",
+                "categoryId": "life",
+                "label": "life.dinner",
+                "color": "var(--cat-life)",
+                "minutes": 1,
+                "percent": 0.0103
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "04-12",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "04-12 16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              },
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "04-13 09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              },
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "04-13",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "04-13 11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          },
+          "social": {
+            "categoryId": "social",
+            "label": "社交",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "label": "04-12",
+                "key": "2026-04-12",
+                "minutes": 5
+              },
+              {
+                "label": "04-13",
+                "key": "2026-04-13",
+                "minutes": 0
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "social.chat",
+                "categoryId": "social",
+                "label": "聊天",
+                "color": "var(--cat-social)",
+                "minutes": 5,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "04-12",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "04-12 14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "04-12",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "04-12 16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "study": {
+            "categoryId": "study",
+            "label": "学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "label": "04-12",
+                "key": "2026-04-12",
+                "minutes": 0
+              },
+              {
+                "label": "04-13",
+                "key": "2026-04-13",
+                "minutes": 1
+              }
+            ],
+            "subcategories": [
+              {
+                "subcategoryId": "study.other",
+                "categoryId": "study",
+                "label": "其他学习",
+                "color": "var(--cat-study)",
+                "minutes": 1,
+                "percent": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "04-13 09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          }
+        },
+        "subcategoryDetails": {
+          "social.chat": {
+            "subcategoryId": "social.chat",
+            "categoryId": "social",
+            "label": "聊天",
+            "color": "var(--cat-social)",
+            "trend": [
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 5
+              },
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-checkin-2026-04-12-1458",
+                "label": "?????",
+                "dateLabel": "04-12",
+                "timeLabel": "14:58 - 15:01",
+                "compactDuration": "3m",
+                "fullLabel": "04-12 14:58 - 15:01 ?????",
+                "note": "???????????????????????????????????????????????",
+                "status": "derived",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 3
+              },
+              {
+                "eventNodeId": "wechat-tone-correction-2026-04-12-1635",
+                "label": "Corrected apology tone",
+                "dateLabel": "04-12",
+                "timeLabel": "16:35 - 16:37",
+                "compactDuration": "2m",
+                "fullLabel": "04-12 16:35 - 16:37 Corrected apology tone",
+                "note": "She said she had spent the whole day adjusting me and found it exhausting. I apologized, and she then corrected specific phrasing she dislikes in a romantic context, preferring softer and more reassuring wording over forced colloquial expressions.",
+                "status": "official",
+                "categoryId": "social",
+                "subcategoryId": "social.chat",
+                "subcategoryLabel": "social.chat",
+                "minutes": 2
+              }
+            ]
+          },
+          "life.dinner": {
+            "subcategoryId": "life.dinner",
+            "categoryId": "life",
+            "label": "life.dinner",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 1
+              },
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 0
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-takeout-plan-2026-04-12-1654",
+                "label": "Planning takeout dinner",
+                "dateLabel": "04-12",
+                "timeLabel": "16:54 - 16:55",
+                "compactDuration": "1m",
+                "fullLabel": "04-12 16:54 - 16:55 Planning takeout dinner",
+                "note": "She said she was about to order takeout and decided on Xinjiang fried rice noodles for dinner.",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.dinner",
+                "subcategoryLabel": "life.dinner",
+                "minutes": 1
+              }
+            ]
+          },
+          "study.other": {
+            "subcategoryId": "study.other",
+            "categoryId": "study",
+            "label": "其他学习",
+            "color": "var(--cat-study)",
+            "trend": [
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 1
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-lab-plan-2026-04-13-0949",
+                "label": "想赶去实验室",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 09:50",
+                "compactDuration": "1m",
+                "fullLabel": "04-13 09:49 - 09:50 想赶去实验室",
+                "note": "早上你说想赶去实验室，作为今天开场的明确计划。",
+                "status": "derived",
+                "categoryId": "study",
+                "subcategoryId": "study.other",
+                "subcategoryLabel": "study.other",
+                "minutes": 1
+              }
+            ]
+          },
+          "life.other": {
+            "subcategoryId": "life.other",
+            "categoryId": "life",
+            "label": "其他生活",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 91
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-phone-time-2026-04-13-0949",
+                "label": "手机时间一路滑到十一点二十",
+                "dateLabel": "04-13",
+                "timeLabel": "09:49 - 11:20",
+                "compactDuration": "1h31m",
+                "fullLabel": "04-13 09:49 - 11:20 手机时间一路滑到十一点二十",
+                "note": "从 09:49 到 11:20 这段你自己给了手机时间线索，这一段先按手机时间记录，不额外补写未确认的活动。",
+                "status": "derived",
+                "categoryId": "life",
+                "subcategoryId": "life.other",
+                "subcategoryLabel": "life.other",
+                "minutes": 91
+              }
+            ]
+          },
+          "life.hygiene": {
+            "subcategoryId": "life.hygiene",
+            "categoryId": "life",
+            "label": "洗漱",
+            "color": "var(--cat-life)",
+            "trend": [
+              {
+                "key": "2026-04-12",
+                "label": "04-12",
+                "minutes": 0
+              },
+              {
+                "key": "2026-04-13",
+                "label": "04-13",
+                "minutes": 5
+              }
+            ],
+            "events": [
+              {
+                "eventNodeId": "wechat-dressed-up-2026-04-13-1120",
+                "label": "换好衣服洗漱完",
+                "dateLabel": "04-13",
+                "timeLabel": "11:20 - 11:25",
+                "compactDuration": "5m",
+                "fullLabel": "04-13 11:20 - 11:25 换好衣服洗漱完",
+                "note": "11:20 你说自己刚换好衣服、洗漱完，这里作为上午真正动起来的节点。",
+                "status": "official",
+                "categoryId": "life",
+                "subcategoryId": "life.hygiene",
+                "subcategoryLabel": "life.hygiene",
+                "minutes": 5
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

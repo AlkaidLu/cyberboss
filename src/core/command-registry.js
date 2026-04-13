@@ -166,6 +166,20 @@ const COMMAND_GROUPS = [
         status: "active",
       },
       {
+        action: "runtime.inspect",
+        summary: "Inspect the current runtime",
+        terminal: [],
+        weixin: ["/runtime"],
+        status: "active",
+      },
+      {
+        action: "runtime.select",
+        summary: "Switch to a specific runtime",
+        terminal: [],
+        weixin: ["/runtime <id>"],
+        status: "active",
+      },
+      {
         action: "model.select",
         summary: "Switch to a specific model",
         terminal: [],
@@ -449,6 +463,7 @@ function buildTopicUsage(topic) {
         "Notes:",
         "  `timeline write` expects a JSON object with `events: [...]`, not a bare array or `{\"title\":\"...\"}` placeholder.",
         "  each event must include `startAt`, `endAt`, and either `eventNodeId` or a resolvable `subcategoryId` (preferably with `categoryId`).",
+        "  on Windows, prefer `--events-file` or `--stdin` over long `--events-json` payloads.",
         "  The stable timeline screenshot entrypoint is `cyberboss timeline screenshot --send`. It hands the job to the current WeChat bridge.",
       ].join("\n");
     default:
@@ -470,9 +485,9 @@ function buildScopedTopicHelp(topic) {
       ].join("\n");
     case "timeline":
       return [
-        `${buildAgentCommandInvocation(["timeline", "write", "--date", "YYYY-MM-DD", "--events-json", "{\"events\":[{\"startAt\":\"2026-04-12T09:00:00+08:00\",\"endAt\":\"2026-04-12T09:30:00+08:00\",\"title\":\"Breakfast\",\"categoryId\":\"life\",\"subcategoryId\":\"life.meal\"}]}"])} `,
+        `${buildAgentCommandInvocation(["timeline", "write", "--date", "YYYY-MM-DD", "--events-file", "/absolute/path/to/events.json"])}   preferred on Windows`,
+        `${buildAgentCommandInvocation(["timeline", "write", "--date", "YYYY-MM-DD", "--stdin"])}   use with stdin if you need inline JSON`,
         "JSON must be an object with `events`; each event needs `startAt`, `endAt`, and either `eventNodeId` or a resolvable `subcategoryId`.",
-        `${buildAgentCommandInvocation(["timeline", "write", "--date", "YYYY-MM-DD", "--events-file", "/absolute/path/to/events.json"])}   large payload`,
         `${buildAgentCommandInvocation(["timeline", "serve", "--locale", "zh-CN"])} / ${buildAgentCommandInvocation(["timeline", "screenshot", "--send", "--locale", "en"])}   locale-sensitive`,
       ].join("\n");
     case "channel":

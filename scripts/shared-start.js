@@ -5,11 +5,13 @@ const {
   bridgePidFile,
   writePidFile,
   removePidFileIfMatches,
+  assertSharedCodexRuntime,
   ensureSharedAppServer,
   ensureBridgeNotRunning,
 } = require("./shared-common");
 
 async function main() {
+  assertSharedCodexRuntime();
   const appServer = await ensureSharedAppServer();
   const appServerPidLabel = appServer.pid ? ` pid=${appServer.pid}` : "";
   console.log(`shared app-server ${appServer.status}${appServerPidLabel} listen=${listenUrl}`);

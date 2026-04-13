@@ -144,7 +144,25 @@ function collectWorkspaceRoots(binding) {
       workspaceRoots.add(normalizedWorkspaceRoot);
     }
   }
+  for (const workspaceRoot of Object.keys(binding?.threadIdByRuntimeByWorkspaceRoot || {})) {
+    const normalizedWorkspaceRoot = normalizeText(workspaceRoot);
+    if (normalizedWorkspaceRoot) {
+      workspaceRoots.add(normalizedWorkspaceRoot);
+    }
+  }
   for (const workspaceRoot of Object.keys(binding?.codexParamsByWorkspaceRoot || {})) {
+    const normalizedWorkspaceRoot = normalizeText(workspaceRoot);
+    if (normalizedWorkspaceRoot) {
+      workspaceRoots.add(normalizedWorkspaceRoot);
+    }
+  }
+  for (const workspaceRoot of Object.keys(binding?.runtimeParamsByRuntimeByWorkspaceRoot || {})) {
+    const normalizedWorkspaceRoot = normalizeText(workspaceRoot);
+    if (normalizedWorkspaceRoot) {
+      workspaceRoots.add(normalizedWorkspaceRoot);
+    }
+  }
+  for (const workspaceRoot of Object.keys(binding?.activeRuntimeByWorkspaceRoot || {})) {
     const normalizedWorkspaceRoot = normalizeText(workspaceRoot);
     if (normalizedWorkspaceRoot) {
       workspaceRoots.add(normalizedWorkspaceRoot);

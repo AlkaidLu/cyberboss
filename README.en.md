@@ -30,7 +30,7 @@
 
 Cyberboss is not another polite productivity timer. It is not a to-do list with better branding either.
 
-It is an agent bridge that plugs Codex directly into WeChat and turns it into a time-aware, context-persistent accountability companion. It does not wait for you to "start a session". It watches the flow of your day, notices when you disappear, and decides when to show up again.
+It is an agent bridge that plugs a local coding agent runtime into WeChat and turns it into a time-aware, context-persistent accountability companion. It does not wait for you to "start a session". It watches the flow of your day, notices when you disappear, and decides when to show up again.
 
 ## Why Cyberboss?
 
@@ -77,7 +77,7 @@ Cyberboss builds on top of `timeline-for-agent`, then adds WeChat, reminders, di
 ## Technical Stack
 
 - **Core**
-  Codex runtime plus a shared `codex app-server` for thread continuity, approvals, and tool execution.
+  A local agent runtime. `codex` remains the default shared-runtime path, and `claude-code` can also be used through its headless CLI adapter.
 - **Bridge**
   A WeChat HTTP bridge with long-poll synchronization for inbound messages, outbound replies, files, and status transitions.
 - **Task System**
@@ -103,7 +103,7 @@ Cyberboss assumes none of that. It treats the user as someone who may drift, dis
 ### Requirements
 
 - Node.js `>= 22`
-- `codex` installed locally
+- `codex` installed locally, or `claude` installed locally if you want `CYBERBOSS_RUNTIME=claude-code`
 - Chrome / Chromium / Edge if you want screenshot features
 
 ### Get the source and install dependencies
@@ -136,10 +136,26 @@ CYBERBOSS_WORKSPACE_ROOT=/absolute/path/to/your/project
 Common optional variables:
 
 ```dotenv
+CYBERBOSS_RUNTIME=codex
 CYBERBOSS_ACCOUNT_ID=
 CYBERBOSS_CODEX_ENDPOINT=ws://127.0.0.1:8765
+CYBERBOSS_CLAUDE_COMMAND=claude
+CYBERBOSS_CLAUDE_PERMISSION_MODE=
 CYBERBOSS_WEIXIN_ADAPTER=v2
 ```
+
+Runtime notes:
+
+- `CYBERBOSS_RUNTIME=codex`
+  Uses the existing Codex adapter, including shared `codex app-server` support.
+- `CYBERBOSS_RUNTIME=claude-code`
+  Uses the local Claude Code CLI in headless mode. This path does not use the Codex JSON-RPC server.
+- `CYBERBOSS_CLAUDE_PERMISSION_MODE`
+  Optional Claude Code permission mode for unattended runs. Set this deliberately based on your local safety requirements.
+
+Current limitation:
+
+- `shared:start` and `shared:open` remain Codex-only. With `CYBERBOSS_RUNTIME=claude-code`, use `npm run start` instead of the shared app-server workflow.
 
 Why this matters:
 

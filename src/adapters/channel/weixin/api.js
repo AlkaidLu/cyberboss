@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const fs = require("fs");
+const https = require("https");
 const path = require("path");
 const { redactSensitiveText } = require("./redact");
 
@@ -48,25 +49,56 @@ async function apiFetch(params) {
   const base = ensureTrailingSlash(params.baseUrl);
   const url = new URL(params.endpoint, base);
   const headers = buildHeaders({ token: params.token, body: params.body });
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), params.timeoutMs);
   try {
-    const response = await fetch(url.toString(), {
+    const { statusCode, bodyText } = await requestOverHttps(url.toString(), {
       method: "POST",
       headers,
       body: params.body,
-      signal: controller.signal,
+      timeoutMs: params.timeoutMs,
     });
-    clearTimeout(timer);
-    const rawText = await response.text();
-    if (!response.ok) {
-      throw new Error(`${params.label} ${response.status}: ${redactSensitiveText(rawText)}`);
+    if (statusCode < 200 || statusCode >= 300) {
+      throw new Error(`${params.label} ${statusCode}: ${redactSensitiveText(bodyText)}`);
     }
-    return rawText;
+    return bodyText;
   } catch (error) {
-    clearTimeout(timer);
-    throw error;
+    throw new Error(`${params.label} fetch failed (${url.toString()}): ${formatFetchError(error)}`);
   }
+}
+
+function formatFetchError(error) {
+  const message = error instanceof Error ? error.message : String(error || "unknown error");
+  const cause = error && typeof error === "object" && "cause" in error ? error.cause : null;
+  const causeText = cause ? (cause instanceof Error ? cause.message : String(cause)) : "";
+  return causeText && causeText !== message ? `${message} | cause=${causeText}` : message;
+}
+
+function requestOverHttps(url, { method, headers, body, timeoutMs }) {
+  return new Promise((resolve, reject) => {
+    const request = https.request(url, {
+      method,
+      headers,
+      timeout: timeoutMs,
+    }, (response) => {
+      let raw = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        raw += chunk;
+      });
+      response.on("end", () => {
+        resolve({
+          statusCode: Number(response.statusCode || 0),
+          bodyText: raw,
+        });
+      });
+    });
+
+    request.on("timeout", () => {
+      request.destroy(new Error(`request timed out after ${timeoutMs}ms`));
+    });
+    request.on("error", reject);
+    request.write(body);
+    request.end();
+  });
 }
 
 function parseApiJson(rawText, label) {

@@ -1,0 +1,35 @@
+{
+  "events": [
+    {
+      "id": "wechat-lunch-rice-noodles-2026-04-13",
+      "startAt": "2026-04-13T12:00:00+08:00",
+      "endAt": "2026-04-13T12:40:00+08:00",
+      "title": "午饭米粉",
+      "note": "中午吃了米粉，时间先按中午粗记。",
+      "categoryId": "life",
+      "subcategoryId": "life.meal",
+      "eventNodeId": "evt.lunch",
+      "tags": ["wechat", "lunch", "rice-noodles"]
+    },
+    {
+      "id": "wechat-coffee-2026-04-13",
+      "startAt": "2026-04-13T12:40:00+08:00",
+      "endAt": "2026-04-13T13:00:00+08:00",
+      "title": "买咖啡",
+      "note": "买了咖啡，时间先按午饭后粗记。",
+      "categoryId": "life",
+      "subcategoryId": "life.shopping",
+      "tags": ["wechat", "coffee"]
+    },
+    {
+      "id": "wechat-read-code-2026-04-13",
+      "startAt": "2026-04-13T13:00:00+08:00",
+      "endAt": "2026-04-13T13:50:00+08:00",
+      "title": "下午看代码",
+      "note": "下午开始看代码（我的代码），先记到你刚刚发消息这个时间点。",
+      "categoryId": "work",
+      "subcategoryId": "work.coding",
+      "tags": ["wechat", "code", "afternoon"]
+    }
+  ]
+}

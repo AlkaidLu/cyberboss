@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const https = require("https");
 
 const DEFAULT_LONG_POLL_TIMEOUT_MS = 35_000;
 const DEFAULT_API_TIMEOUT_MS = 15_000;
@@ -33,41 +34,76 @@ function buildHeaders(token, body) {
 
 async function apiPost({ baseUrl, endpoint, token, body, timeoutMs = 0, label }) {
   const url = new URL(endpoint, ensureTrailingSlash(baseUrl)).toString();
-  const controller = new AbortController();
   const timeout = timeoutMs > 0 ? timeoutMs : DEFAULT_API_TIMEOUT_MS;
-  const timer = setTimeout(() => controller.abort(), timeout + 5_000);
-
   try {
-    const response = await fetch(url, {
+    const { statusCode, bodyText } = await requestOverHttps(url, {
       method: "POST",
       headers: buildHeaders(token, body),
       body,
-      signal: controller.signal,
+      timeoutMs: timeout + 5_000,
     });
-    const raw = await response.text();
-    if (Buffer.byteLength(raw, "utf8") > MAX_RESPONSE_BODY_BYTES) {
+    if (Buffer.byteLength(bodyText, "utf8") > MAX_RESPONSE_BODY_BYTES) {
       throw new Error(`${label} response body exceeds ${MAX_RESPONSE_BODY_BYTES} bytes`);
     }
-    if (!response.ok) {
-      throw new Error(`${label} http ${response.status}: ${truncateForLog(raw, 512)}`);
+    if (statusCode < 200 || statusCode >= 300) {
+      throw new Error(`${label} http ${statusCode}: ${truncateForLog(bodyText, 512)}`);
     }
-    return raw;
-  } finally {
-    clearTimeout(timer);
+    return bodyText;
+  } catch (error) {
+    throw new Error(`${label} fetch failed (${url}): ${formatFetchError(error)}`);
   }
 }
 
 function parseJson(raw, label) {
   try {
     return JSON.parse(raw);
-  } catch (error) {
+  } catch {
     throw new Error(`${label} returned invalid JSON: ${truncateForLog(raw, 256)}`);
   }
 }
 
 function truncateForLog(value, max) {
   const text = typeof value === "string" ? value : String(value || "");
-  return text.length <= max ? text : `${text.slice(0, max)}…`;
+  return text.length <= max ? text : `${text.slice(0, max)}...`;
+}
+
+function formatFetchError(error) {
+  const message = error instanceof Error ? error.message : String(error || "unknown error");
+  const cause = error && typeof error === "object" && "cause" in error ? error.cause : null;
+  const causeText = cause ? (cause instanceof Error ? cause.message : String(cause)) : "";
+  return causeText && causeText !== message ? `${message} | cause=${causeText}` : message;
+}
+
+function requestOverHttps(url, { method, headers, body, timeoutMs }) {
+  return new Promise((resolve, reject) => {
+    const request = https.request(url, {
+      method,
+      headers,
+      timeout: timeoutMs,
+    }, (response) => {
+      let raw = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        raw += chunk;
+        if (Buffer.byteLength(raw, "utf8") > MAX_RESPONSE_BODY_BYTES) {
+          request.destroy(new Error(`response body exceeds ${MAX_RESPONSE_BODY_BYTES} bytes`));
+        }
+      });
+      response.on("end", () => {
+        resolve({
+          statusCode: Number(response.statusCode || 0),
+          bodyText: raw,
+        });
+      });
+    });
+
+    request.on("timeout", () => {
+      request.destroy(new Error(`request timed out after ${timeoutMs}ms`));
+    });
+    request.on("error", reject);
+    request.write(body);
+    request.end();
+  });
 }
 
 async function getUpdatesV2({ baseUrl, token, getUpdatesBuf = "", timeoutMs = DEFAULT_LONG_POLL_TIMEOUT_MS }) {

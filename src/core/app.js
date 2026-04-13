@@ -4,7 +4,8 @@ const crypto = require("crypto");
 const fs = require("fs");
 const { createWeixinChannelAdapter } = require("../adapters/channel/weixin");
 const { persistIncomingWeixinAttachments } = require("../adapters/channel/weixin/media-receive");
-const { createCodexRuntimeAdapter } = require("../adapters/runtime/codex");
+const { createRuntimeAdapterMap, listSupportedRuntimeIds, normalizeRuntimeId } = require("../adapters/runtime");
+const { SessionStore } = require("../adapters/runtime/codex/session-store");
 const { findModelByQuery } = require("../adapters/runtime/codex/model-catalog");
 const { createTimelineIntegration } = require("../integrations/timeline");
 const { buildAgentCommandGuide, buildWeixinHelpText } = require("./command-registry");
@@ -32,7 +33,11 @@ class CyberbossApp {
   constructor(config) {
     this.config = config;
     this.channelAdapter = createWeixinChannelAdapter(config);
-    this.runtimeAdapter = createCodexRuntimeAdapter(config);
+    this.sessionStore = new SessionStore({ filePath: config.sessionsFile });
+    this.runtimeAdapters = createRuntimeAdapterMap({
+      ...config,
+      sessionStore: this.sessionStore,
+    });
     this.timelineIntegration = createTimelineIntegration(config);
     this.threadStateStore = new ThreadStateStore();
     this.systemMessageQueue = new SystemMessageQueueStore({ filePath: config.systemMessageQueueFile });
@@ -43,29 +48,64 @@ class CyberbossApp {
     this.systemMessageDispatcher = null;
     this.streamDelivery = new StreamDelivery({
       channelAdapter: this.channelAdapter,
-      sessionStore: this.runtimeAdapter.getSessionStore(),
+      sessionStore: this.sessionStore,
       onDeferredSystemReply: (payload) => this.deferSystemReply(payload),
     });
     this.pendingRuntimeEventWatchdogs = new Map();
     this.runtimeEventChain = Promise.resolve();
-    this.runtimeAdapter.onEvent((event) => {
-      this.clearRuntimeEventWatchdog(event?.payload?.threadId);
-      this.threadStateStore.applyRuntimeEvent(event);
-      this.runtimeEventChain = this.runtimeEventChain
-        .catch(() => {})
-        .then(() => this.handleRuntimeEvent(event))
-        .catch((error) => {
-          const message = error instanceof Error ? error.stack || error.message : String(error);
-          console.error(`[cyberboss] runtime event handling failed type=${event?.type || "(unknown)"} ${message}`);
-        });
-    });
+    for (const runtimeAdapter of Object.values(this.runtimeAdapters)) {
+      runtimeAdapter.onEvent((event) => {
+        this.clearRuntimeEventWatchdog(event?.payload?.threadId);
+        this.threadStateStore.applyRuntimeEvent(event);
+        this.runtimeEventChain = this.runtimeEventChain
+          .catch(() => {})
+          .then(() => this.handleRuntimeEvent(event))
+          .catch((error) => {
+            const message = error instanceof Error ? error.stack || error.message : String(error);
+            console.error(`[cyberboss] runtime event handling failed type=${event?.type || "(unknown)"} ${message}`);
+          });
+      });
+    }
+  }
+
+  getSessionStore() {
+    return this.sessionStore;
+  }
+
+  getRuntimeAdapter(runtimeId) {
+    const normalizedRuntimeId = normalizeRuntimeId(runtimeId) || normalizeRuntimeId(this.config.runtime) || "codex";
+    const adapter = this.runtimeAdapters[normalizedRuntimeId];
+    if (!adapter) {
+      throw new Error(`Unsupported runtime: ${runtimeId || "(empty)"}`);
+    }
+    return adapter;
+  }
+
+  getActiveRuntimeId(bindingKey, workspaceRoot) {
+    return this.sessionStore.getRuntimeForWorkspace(
+      bindingKey,
+      workspaceRoot,
+      normalizeRuntimeId(this.config.runtime) || "codex"
+    ) || "codex";
+  }
+
+  getActiveRuntimeAdapter(bindingKey, workspaceRoot) {
+    return this.getRuntimeAdapter(this.getActiveRuntimeId(bindingKey, workspaceRoot));
+  }
+
+  async closeRuntimeAdapters() {
+    await Promise.all(
+      Object.values(this.runtimeAdapters).map((adapter) => adapter.close().catch(() => {}))
+    );
   }
 
   printDoctor() {
     console.log(JSON.stringify({
       stateDir: this.config.stateDir,
       channel: this.channelAdapter.describe(),
-      runtime: this.runtimeAdapter.describe(),
+      runtimes: Object.fromEntries(
+        Object.entries(this.runtimeAdapters).map(([runtimeId, adapter]) => [runtimeId, adapter.describe()])
+      ),
       timeline: this.timelineIntegration.describe(),
       threads: this.threadStateStore.snapshot(),
     }, null, 2));
@@ -87,22 +127,29 @@ class CyberbossApp {
       config: this.config,
       accountId: account.accountId,
     });
-    const runtimeState = await this.runtimeAdapter.initialize();
+    const runtimeStates = await Promise.all(
+      Object.entries(this.runtimeAdapters).map(async ([runtimeId, adapter]) => [runtimeId, await adapter.initialize()])
+    );
     const knownContextTokens = Object.keys(this.channelAdapter.getKnownContextTokens()).length;
     const syncBuffer = this.channelAdapter.loadSyncBuffer();
     await this.restoreBoundThreadSubscriptions();
 
     console.log("[cyberboss] bootstrap ok");
     console.log(`[cyberboss] channel=${this.channelAdapter.describe().id}`);
-    console.log(`[cyberboss] runtime=${this.runtimeAdapter.describe().id}`);
+    console.log(`[cyberboss] runtimes=${Object.keys(this.runtimeAdapters).join(",")}`);
     console.log(`[cyberboss] timeline=${this.timelineIntegration.describe().id}`);
     console.log(`[cyberboss] account=${account.accountId}`);
     console.log(`[cyberboss] baseUrl=${account.baseUrl}`);
     console.log(`[cyberboss] workspaceRoot=${this.config.workspaceRoot}`);
     console.log(`[cyberboss] knownContextTokens=${knownContextTokens}`);
     console.log(`[cyberboss] syncBuffer=${syncBuffer ? "ready" : "empty"}`);
-    console.log(`[cyberboss] codexEndpoint=${runtimeState.endpoint}`);
-    console.log(`[cyberboss] codexModels=${runtimeState.models.length}`);
+    for (const [runtimeId, runtimeState] of runtimeStates) {
+      console.log(`[cyberboss] runtimeEndpoint[${runtimeId}]=${runtimeState.endpoint}`);
+      console.log(`[cyberboss] runtimeModels[${runtimeId}]=${runtimeState.models.length}`);
+      if (runtimeId === "qwen") {
+        console.log(`[cyberboss] qwenKey=${runtimeState.hasApiKey ? "present" : "missing"}`);
+      }
+    }
     console.log("[cyberboss] bridge loop started; waiting for WeChat messages.");
     if (this.config.startWithCheckin) {
       console.log("[cyberboss] checkin: enabled");
@@ -112,7 +159,7 @@ class CyberbossApp {
     }
 
     const shutdown = createShutdownController(async () => {
-      await this.runtimeAdapter.close();
+      await this.closeRuntimeAdapters();
     });
 
     try {
@@ -149,12 +196,15 @@ class CyberbossApp {
 
           consecutiveFailures += 1;
           console.error(`[cyberboss] poll failed: ${formatErrorMessage(error)}`);
+          if (error instanceof Error && error.stack) {
+            console.error(error.stack);
+          }
           await sleep(consecutiveFailures >= MAX_CONSECUTIVE_FAILURES ? BACKOFF_DELAY_MS : RETRY_DELAY_MS);
         }
       }
     } finally {
       shutdown.dispose();
-      await this.runtimeAdapter.close();
+      await this.closeRuntimeAdapters();
     }
   }
 
@@ -270,7 +320,7 @@ class CyberbossApp {
     if (!pendingReplies.length) {
       return;
     }
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
@@ -285,12 +335,12 @@ class CyberbossApp {
     return resolvePreferredSenderId({
       config: this.config,
       accountId: this.channelAdapter.resolveAccount().accountId,
-      sessionStore: this.runtimeAdapter.getSessionStore(),
+      sessionStore: this.sessionStore,
     });
   }
 
   async handlePreparedMessage(normalized, { allowCommands }) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
@@ -320,11 +370,13 @@ class CyberbossApp {
     }).catch(() => {});
 
     try {
-      const turn = await this.runtimeAdapter.sendTextTurn({
+      const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+      const runtimeAdapter = this.getRuntimeAdapter(runtimeId);
+      const turn = await runtimeAdapter.sendTextTurn({
         bindingKey,
         workspaceRoot,
         text: prepared.text,
-        model: this.runtimeAdapter.getSessionStore().getCodexParamsForWorkspace(bindingKey, workspaceRoot).model,
+        model: this.sessionStore.getRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId).model,
         metadata: {
           workspaceId: prepared.workspaceId,
           accountId: prepared.accountId,
@@ -353,9 +405,10 @@ class CyberbossApp {
   }
 
   scheduleRuntimeEventWatchdog({ bindingKey, workspaceRoot, normalized, threadId = "" }) {
-    const sessionStore = this.runtimeAdapter.getSessionStore();
+    const sessionStore = this.sessionStore;
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
     const candidateThreadId = normalizeCommandArgument(threadId)
-      || sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot);
+      || sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     const normalizedThreadId = normalizeCommandArgument(candidateThreadId);
     if (!normalizedThreadId) {
       return;
@@ -377,7 +430,7 @@ class CyberbossApp {
         contextToken: normalized.contextToken,
         preserveBlock: true,
         text: [
-          "This message has already reached the bridge, but Codex runtime has not returned the first event yet.",
+          "This message has already reached the bridge, but the runtime has not returned the first event yet.",
           "If your terminal is still reconnecting, this round is probably still stuck in shared-thread startup.",
           "You do not need to keep waiting in chat. If it reconnects later, the message will continue.",
           `workspace: ${workspaceRoot}`,
@@ -401,7 +454,7 @@ class CyberbossApp {
         contextToken: normalized.contextToken,
         preserveBlock: true,
         text: [
-          "This message has already reached the bridge, but Codex runtime still has not returned the first event.",
+          "This message has already reached the bridge, but the runtime still has not returned the first event.",
           "If the reconnecting cycle in the terminal already finished 5 attempts, this shared thread most likely never started successfully.",
           `workspace: ${workspaceRoot}`,
           `thread: ${normalizedThreadId}`,
@@ -579,12 +632,12 @@ class CyberbossApp {
   }
 
   resolveReminderWorkspaceRoot(reminder) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: this.config.workspaceId,
       accountId: reminder.accountId,
       senderId: reminder.senderId,
     });
-    return this.runtimeAdapter.getSessionStore().getActiveWorkspaceRoot(bindingKey) || this.config.workspaceRoot;
+    return this.sessionStore.getActiveWorkspaceRoot(bindingKey) || this.config.workspaceRoot;
   }
 
   async dispatchSystemMessage(message) {
@@ -592,13 +645,14 @@ class CyberbossApp {
     if (!prepared) {
       throw new Error("system message could not be prepared");
     }
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: prepared.workspaceId,
       accountId: prepared.accountId,
       senderId: prepared.senderId,
     });
     const workspaceRoot = prepared.workspaceRoot || this.resolveWorkspaceRoot(bindingKey);
-    const threadId = this.runtimeAdapter.getSessionStore().getThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const threadId = this.sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     const threadState = threadId ? this.threadStateStore.getThreadState(threadId) : null;
     if (threadState?.status === "running" || hasRpcId(threadState?.pendingApproval?.requestId)) {
       return false;
@@ -638,13 +692,16 @@ class CyberbossApp {
       case "model":
         await this.handleModelCommand(normalized, command);
         return;
+      case "runtime":
+        await this.handleRuntimeCommand(normalized, command);
+        return;
       case "help":
         await this.handleHelpCommand(normalized);
         return;
       default:
         await this.channelAdapter.sendText({
           userId: normalized.senderId,
-          text: buildWeixinHelpText(),
+          text: `Unknown command: /${command.name}\n\n${buildWeixinHelpText()}`,
           contextToken: normalized.contextToken,
         });
     }
@@ -680,12 +737,12 @@ class CyberbossApp {
       return;
     }
 
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
-    this.runtimeAdapter.getSessionStore().setActiveWorkspaceRoot(bindingKey, workspaceRoot);
+    this.sessionStore.setActiveWorkspaceRoot(bindingKey, workspaceRoot);
     await this.channelAdapter.sendText({
       userId: normalized.senderId,
       text: `Workspace bound.\n\nworkspace: ${workspaceRoot}`,
@@ -694,20 +751,22 @@ class CyberbossApp {
   }
 
   async handleStatusCommand(normalized) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    const threadId = this.runtimeAdapter.getSessionStore().getThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const threadId = this.sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     const threadState = threadId ? this.threadStateStore.getThreadState(threadId) : null;
     const usage = this.threadStateStore.getLatestUsage();
     const lines = [
       `workspace: ${workspaceRoot}`,
+      `runtime: ${formatRuntimeForUser(runtimeId)}`,
       `thread: ${threadId || "(none)"}`,
       `status: ${threadState?.status || "idle"}`,
-      `model: ${this.runtimeAdapter.getSessionStore().getCodexParamsForWorkspace(bindingKey, workspaceRoot).model || "(default)"}`,
+      `model: ${this.sessionStore.getRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId).model || "(default)"}`,
     ];
     if (usage) {
       const usageParts = [];
@@ -734,29 +793,32 @@ class CyberbossApp {
   }
 
   async handleNewCommand(normalized) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    this.runtimeAdapter.getSessionStore().clearThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    this.sessionStore.clearThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     await this.channelAdapter.sendText({
       userId: normalized.senderId,
-      text: `Switched to a fresh thread draft.\n\nworkspace: ${workspaceRoot}`,
+      text: `Switched to a fresh thread draft.\n\nworkspace: ${workspaceRoot}\nruntime: ${formatRuntimeForUser(runtimeId)}`,
       contextToken: normalized.contextToken,
     });
   }
 
   async handleRereadCommand(normalized) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    const sessionStore = this.runtimeAdapter.getSessionStore();
-    const threadId = sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const sessionStore = this.sessionStore;
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const runtimeAdapter = this.getRuntimeAdapter(runtimeId);
+    const threadId = sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     if (!threadId) {
       await this.channelAdapter.sendText({
         userId: normalized.senderId,
@@ -778,10 +840,10 @@ class CyberbossApp {
         normalized,
         threadId,
       });
-      await this.runtimeAdapter.refreshThreadInstructions({
+      await runtimeAdapter.refreshThreadInstructions({
         threadId,
         workspaceRoot,
-        model: sessionStore.getCodexParamsForWorkspace(bindingKey, workspaceRoot).model,
+        model: sessionStore.getRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId).model,
       });
     } catch (error) {
       await this.channelAdapter.sendText({
@@ -803,29 +865,31 @@ class CyberbossApp {
       return;
     }
 
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    await this.runtimeAdapter.resumeThread({ threadId: targetThreadId });
-    this.runtimeAdapter.getSessionStore().setThreadIdForWorkspace(bindingKey, workspaceRoot, targetThreadId);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    await this.getRuntimeAdapter(runtimeId).resumeThread({ threadId: targetThreadId });
+    this.sessionStore.setThreadIdForWorkspace(bindingKey, workspaceRoot, targetThreadId, {}, runtimeId);
     await this.channelAdapter.sendText({
       userId: normalized.senderId,
-      text: `Thread switched.\n\nworkspace: ${workspaceRoot}\nthread: ${targetThreadId}`,
+      text: `Thread switched.\n\nworkspace: ${workspaceRoot}\nruntime: ${formatRuntimeForUser(runtimeId)}\nthread: ${targetThreadId}`,
       contextToken: normalized.contextToken,
     });
   }
 
   async handleStopCommand(normalized) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    const threadId = this.runtimeAdapter.getSessionStore().getThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const threadId = this.sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     const threadState = threadId ? this.threadStateStore.getThreadState(threadId) : null;
     if (!threadId || !threadState?.turnId || threadState.status !== "running") {
       await this.channelAdapter.sendText({
@@ -836,7 +900,7 @@ class CyberbossApp {
       return;
     }
 
-    await this.runtimeAdapter.cancelTurn({
+    await this.getRuntimeAdapter(runtimeId).cancelTurn({
       threadId,
       turnId: threadState.turnId,
     });
@@ -881,13 +945,15 @@ class CyberbossApp {
   }
 
   async handleApprovalCommand(normalized, command) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
-    const threadId = this.runtimeAdapter.getSessionStore().getThreadIdForWorkspace(bindingKey, workspaceRoot);
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const runtimeAdapter = this.getRuntimeAdapter(runtimeId);
+    const threadId = this.sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, runtimeId);
     const threadState = threadId ? this.threadStateStore.getThreadState(threadId) : null;
     const approval = threadState?.pendingApproval || null;
     if (!threadId || approval?.requestId == null || String(approval.requestId).trim() === "") {
@@ -903,16 +969,16 @@ class CyberbossApp {
     console.log(
       `[cyberboss] approval response requested thread=${threadId} requestId=${approval.requestId} decision=${decision} workspace=${workspaceRoot}`
     );
-    await this.runtimeAdapter.respondApproval({
+    await runtimeAdapter.respondApproval({
       requestId: approval.requestId,
       decision,
     });
-    this.runtimeAdapter.getSessionStore().clearApprovalPrompt(threadId);
+    this.sessionStore.clearApprovalPrompt(threadId);
     console.log(
       `[cyberboss] approval response delivered thread=${threadId} requestId=${approval.requestId} decision=${decision}`
     );
     if (command.name === "always" && decision === "accept") {
-      this.runtimeAdapter.getSessionStore().rememberApprovalPrefixForWorkspace(workspaceRoot, approval.commandTokens);
+      this.sessionStore.rememberApprovalPrefixForWorkspace(workspaceRoot, approval.commandTokens);
     }
     this.threadStateStore.resolveApproval(threadId, "running");
     const text = command.name === "always"
@@ -926,36 +992,31 @@ class CyberbossApp {
   }
 
   async handleModelCommand(normalized, command) {
-    const bindingKey = this.runtimeAdapter.getSessionStore().buildBindingKey({
+    const bindingKey = this.sessionStore.buildBindingKey({
       workspaceId: normalized.workspaceId,
       accountId: normalized.accountId,
       senderId: normalized.senderId,
     });
     const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
     const query = normalizeCommandArgument(command.args);
-    const sessionStore = this.runtimeAdapter.getSessionStore();
-    const catalog = sessionStore.getAvailableModelCatalog();
-    const currentModel = sessionStore.getCodexParamsForWorkspace(bindingKey, workspaceRoot).model;
+    const sessionStore = this.sessionStore;
+    const runtimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+    const catalog = sessionStore.getAvailableModelCatalog(runtimeId);
+    const currentModel = sessionStore.getRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId).model;
 
     if (!query) {
-      const lines = [
-        `Current model: ${currentModel || "(default)"}`,
-      ];
-      if (catalog?.models?.length) {
-        lines.push(`Available models: ${catalog.models.map((item) => item.model).join(", ")}`);
-      } else {
-        lines.push("Available models: (not available)");
-      }
-      await this.channelAdapter.sendText({
+      await this.sendRuntimeModelCatalog({
         userId: normalized.senderId,
-        text: lines.join("\n"),
         contextToken: normalized.contextToken,
+        bindingKey,
+        workspaceRoot,
+        runtimeId,
       });
       return;
     }
 
     const matched = findModelByQuery(catalog?.models || [], query);
-    if (!matched) {
+    if (!matched && catalog?.models?.length) {
       await this.channelAdapter.sendText({
         userId: normalized.senderId,
         text: `Model not found: ${query}`,
@@ -964,13 +1025,60 @@ class CyberbossApp {
       return;
     }
 
-    sessionStore.setCodexParamsForWorkspace(bindingKey, workspaceRoot, {
-      model: matched.model,
+    sessionStore.setRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId, {
+      model: matched?.model || query,
     });
     await this.channelAdapter.sendText({
       userId: normalized.senderId,
-      text: `Model switched.\n\nworkspace: ${workspaceRoot}\nmodel: ${matched.model}`,
+      text: `Model switched.\n\nworkspace: ${workspaceRoot}\nruntime: ${formatRuntimeForUser(runtimeId)}\nmodel: ${matched?.model || query}`,
       contextToken: normalized.contextToken,
+    });
+  }
+
+  async handleRuntimeCommand(normalized, command) {
+    const bindingKey = this.sessionStore.buildBindingKey({
+      workspaceId: normalized.workspaceId,
+      accountId: normalized.accountId,
+      senderId: normalized.senderId,
+    });
+    const workspaceRoot = this.resolveWorkspaceRoot(bindingKey);
+    const query = normalizeRuntimeId(normalizeCommandArgument(command.args));
+    const currentRuntimeId = this.getActiveRuntimeId(bindingKey, workspaceRoot);
+
+    if (!query) {
+      await this.channelAdapter.sendText({
+        userId: normalized.senderId,
+        text: [
+          `Current runtime: ${formatRuntimeForUser(currentRuntimeId)}`,
+          `Available runtimes: ${listSupportedRuntimeIds().map((item) => formatRuntimeForUser(item)).join(", ")}`,
+        ].join("\n"),
+        contextToken: normalized.contextToken,
+      });
+      return;
+    }
+
+    if (!listSupportedRuntimeIds().includes(query)) {
+      await this.channelAdapter.sendText({
+        userId: normalized.senderId,
+        text: `Runtime not found: ${command.args}`,
+        contextToken: normalized.contextToken,
+      });
+      return;
+    }
+
+    await this.getRuntimeAdapter(query).initialize();
+    this.sessionStore.setRuntimeForWorkspace(bindingKey, workspaceRoot, query);
+    await this.channelAdapter.sendText({
+      userId: normalized.senderId,
+      text: `Runtime switched.\n\nworkspace: ${workspaceRoot}\nruntime: ${formatRuntimeForUser(query)}`,
+      contextToken: normalized.contextToken,
+    });
+    await this.sendRuntimeModelCatalog({
+      userId: normalized.senderId,
+      contextToken: normalized.contextToken,
+      bindingKey,
+      workspaceRoot,
+      runtimeId: query,
     });
   }
 
@@ -983,8 +1091,26 @@ class CyberbossApp {
   }
 
   resolveWorkspaceRoot(bindingKey) {
-    const sessionStore = this.runtimeAdapter.getSessionStore();
-    return sessionStore.getActiveWorkspaceRoot(bindingKey) || this.config.workspaceRoot;
+    return this.sessionStore.getActiveWorkspaceRoot(bindingKey) || this.config.workspaceRoot;
+  }
+
+  async sendRuntimeModelCatalog({ userId, contextToken, bindingKey, workspaceRoot, runtimeId }) {
+    const catalog = this.sessionStore.getAvailableModelCatalog(runtimeId);
+    const currentModel = this.sessionStore.getRuntimeParamsForWorkspace(bindingKey, workspaceRoot, runtimeId).model;
+    const lines = [
+      `Current runtime: ${formatRuntimeForUser(runtimeId)}`,
+      `Current model: ${currentModel || "(default)"}`,
+    ];
+    if (catalog?.models?.length) {
+      lines.push(`Available models: ${catalog.models.map((item) => item.model).join(", ")}`);
+    } else {
+      lines.push("Available models: (not available)");
+    }
+    await this.channelAdapter.sendText({
+      userId,
+      text: lines.join("\n"),
+      contextToken,
+    });
   }
 
   async handleRuntimeEvent(event) {
@@ -993,7 +1119,7 @@ class CyberbossApp {
       return;
     }
     if (event.type === "runtime.turn.completed" || event.type === "runtime.turn.failed") {
-      this.runtimeAdapter.getSessionStore().clearApprovalPrompt(event.payload.threadId);
+      this.sessionStore.clearApprovalPrompt(event.payload.threadId);
       await this.stopTypingForThread(event.payload.threadId);
       if (event.type === "runtime.turn.failed") {
         await this.sendFailureToThread(event.payload.threadId, event.payload.text || "Execution failed");
@@ -1003,7 +1129,7 @@ class CyberbossApp {
     if (event.type !== "runtime.approval.requested") {
       return;
     }
-    const sessionStore = this.runtimeAdapter.getSessionStore();
+    const sessionStore = this.sessionStore;
     const linked = sessionStore.findBindingForThreadId(event.payload.threadId);
     if (!linked?.workspaceRoot) {
       return;
@@ -1031,7 +1157,7 @@ class CyberbossApp {
       });
       return;
     }
-    await this.runtimeAdapter.respondApproval({
+    await this.getRuntimeAdapter(linked.runtimeId || "codex").respondApproval({
       requestId: event.payload.requestId,
       decision: "accept",
     }).catch(() => {});
@@ -1039,7 +1165,7 @@ class CyberbossApp {
   }
 
   async stopTypingForThread(threadId) {
-    const linked = this.runtimeAdapter.getSessionStore().findBindingForThreadId(threadId);
+    const linked = this.sessionStore.findBindingForThreadId(threadId);
     const target = linked?.bindingKey ? this.resolveReplyTargetForBinding(linked.bindingKey) : null;
     if (!target) {
       return;
@@ -1052,7 +1178,7 @@ class CyberbossApp {
   }
 
   async sendFailureToThread(threadId, text) {
-    const linked = this.runtimeAdapter.getSessionStore().findBindingForThreadId(threadId);
+    const linked = this.sessionStore.findBindingForThreadId(threadId);
     const target = linked?.bindingKey ? this.resolveReplyTargetForBinding(linked.bindingKey) : null;
     if (!target) {
       return;
@@ -1092,7 +1218,7 @@ class CyberbossApp {
   }
 
   async restoreBoundThreadSubscriptions() {
-    const sessionStore = this.runtimeAdapter.getSessionStore();
+    const sessionStore = this.sessionStore;
     const bindings = sessionStore.listBindings();
     const seenThreadIds = new Set();
 
@@ -1107,22 +1233,41 @@ class CyberbossApp {
         this.streamDelivery.setReplyTarget(bindingKey, target);
       }
 
-      const threadIdByWorkspaceRoot = binding?.threadIdByWorkspaceRoot && typeof binding.threadIdByWorkspaceRoot === "object"
+      const threadIdByRuntimeByWorkspaceRoot = binding?.threadIdByRuntimeByWorkspaceRoot
+        && typeof binding.threadIdByRuntimeByWorkspaceRoot === "object"
+        ? binding.threadIdByRuntimeByWorkspaceRoot
+        : {};
+      const legacyThreadIdByWorkspaceRoot = binding?.threadIdByWorkspaceRoot
+        && typeof binding.threadIdByWorkspaceRoot === "object"
         ? binding.threadIdByWorkspaceRoot
         : {};
-      for (const threadId of Object.values(threadIdByWorkspaceRoot)) {
+      for (const threadId of Object.values(legacyThreadIdByWorkspaceRoot)) {
         const normalizedThreadId = normalizeCommandArgument(threadId);
-        if (!normalizedThreadId || seenThreadIds.has(normalizedThreadId)) {
+        if (!normalizedThreadId || seenThreadIds.has(`codex:${normalizedThreadId}`)) {
           continue;
         }
-        seenThreadIds.add(normalizedThreadId);
-        await this.runtimeAdapter.resumeThread({ threadId: normalizedThreadId }).catch(() => {});
+        seenThreadIds.add(`codex:${normalizedThreadId}`);
+        await this.getRuntimeAdapter("codex").resumeThread({ threadId: normalizedThreadId }).catch(() => {});
+      }
+      for (const runtimeMap of Object.values(threadIdByRuntimeByWorkspaceRoot)) {
+        if (!runtimeMap || typeof runtimeMap !== "object") {
+          continue;
+        }
+        for (const [runtimeId, threadId] of Object.entries(runtimeMap)) {
+          const normalizedThreadId = normalizeCommandArgument(threadId);
+          const normalizedRuntimeId = normalizeRuntimeId(runtimeId);
+          if (!normalizedThreadId || !normalizedRuntimeId || seenThreadIds.has(`${normalizedRuntimeId}:${normalizedThreadId}`)) {
+            continue;
+          }
+          seenThreadIds.add(`${normalizedRuntimeId}:${normalizedThreadId}`);
+          await this.getRuntimeAdapter(normalizedRuntimeId).resumeThread({ threadId: normalizedThreadId }).catch(() => {});
+        }
       }
     }
   }
 
   resolveReplyTargetForBinding(bindingKey) {
-    const binding = this.runtimeAdapter.getSessionStore().getBinding(bindingKey) || null;
+    const binding = this.sessionStore.getBinding(bindingKey) || null;
     const userId = normalizeCommandArgument(binding?.senderId);
     if (!userId) {
       return null;
@@ -1250,6 +1395,23 @@ function normalizeCommandName(value) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
+function formatRuntimeForUser(runtimeId) {
+  const normalized = normalizeRuntimeId(runtimeId);
+  if (normalized === "codex") {
+    return "openai";
+  }
+  if (normalized === "claude-code") {
+    return "claude";
+  }
+  if (normalized === "aliyun") {
+    return "aliyun";
+  }
+  if (normalized === "qwen") {
+    return "qwen";
+  }
+  return normalized || "(unknown)";
+}
+
 const WINDOWS_DRIVE_PATH_RE = /^[A-Za-z]:\//;
 const WINDOWS_DRIVE_ROOT_RE = /^[A-Za-z]:\/$/;
 const WINDOWS_UNC_PREFIX_RE = /^\/\/\?\//;
@@ -1327,7 +1489,14 @@ function matchesCommandPrefix(commandTokens, allowlist) {
     if (!Array.isArray(prefix) || !prefix.length || prefix.length > normalizedCommandTokens.length) {
       return false;
     }
-    return prefix.every((part, index) => normalizeCommandArgument(part) === normalizedCommandTokens[index]);
+    return prefix.every((part, index) => {
+      const normalizedPart = normalizeCommandArgument(part);
+      const actual = normalizedCommandTokens[index];
+      if (index === prefix.length - 1) {
+        return actual === normalizedPart || actual.startsWith(normalizedPart);
+      }
+      return normalizedPart === actual;
+    });
   });
 }
 
@@ -1365,18 +1534,31 @@ function matchesBuiltInCommandPrefix(commandTokens) {
 }
 
 function normalizeCommandTokensForMatching(commandTokens) {
-  const normalized = Array.isArray(commandTokens)
+  let normalized = Array.isArray(commandTokens)
     ? commandTokens.map((part) => normalizeCommandArgument(part)).filter(Boolean)
     : [];
-  if (normalized.length >= 3 && isShellWrapper(normalized[0], normalized[1])) {
-    return splitCommandLine(normalized.slice(2).join(" "));
+  while (normalized.length >= 2) {
+    if (isShellWrapper(normalized[0], normalized[1])) {
+      normalized = splitCommandLine(normalized.slice(2).join(" "));
+      continue;
+    }
+    const windowsWrapped = unwrapWindowsCommandWrapper(normalized);
+    if (windowsWrapped) {
+      normalized = windowsWrapped;
+      continue;
+    }
+    break;
   }
   return normalized;
 }
 
 function isShellWrapper(command, flag) {
   const executable = path.basename(normalizeCommandArgument(command));
-  return (executable === "sh" || executable === "bash" || executable === "zsh") && flag === "-lc";
+  if ((executable === "sh" || executable === "bash" || executable === "zsh") && flag === "-lc") {
+    return true;
+  }
+  return (executable === "powershell" || executable === "powershell.exe" || executable === "pwsh" || executable === "pwsh.exe")
+    && (flag === "-Command" || flag === "-command" || flag === "-c");
 }
 
 function isBuiltInScriptName(scriptName) {
@@ -1393,6 +1575,10 @@ function matchesBuiltInShellScript(scriptPath) {
 function matchesBuiltInCliCommand(tokens) {
   if (!Array.isArray(tokens) || tokens.length < 2) {
     return false;
+  }
+  const executable = path.basename(normalizeCommandArgument(tokens[0])).toLowerCase();
+  if (executable === "cyberboss.cmd" || executable === "cyberboss.bat" || executable === "cyberboss.exe") {
+    return matchesBuiltInCliCommand(tokens.slice(1));
   }
   const topic = normalizeCommandArgument(tokens[0]);
   const action = normalizeCommandArgument(tokens[1]);
@@ -1453,6 +1639,21 @@ function splitCommandLine(input) {
     tokens.push(current);
   }
   return tokens;
+}
+
+function unwrapWindowsCommandWrapper(tokens) {
+  if (!Array.isArray(tokens) || tokens.length < 2) {
+    return null;
+  }
+  const executable = path.basename(normalizeCommandArgument(tokens[0])).toLowerCase();
+  if (executable !== "cmd" && executable !== "cmd.exe") {
+    return null;
+  }
+  const commandIndex = tokens.findIndex((token, index) => index > 0 && (/^\/[ck]$/i.test(normalizeCommandArgument(token))));
+  if (commandIndex < 0 || commandIndex >= tokens.length - 1) {
+    return null;
+  }
+  return splitCommandLine(tokens.slice(commandIndex + 1).join(" "));
 }
 
 function buildApprovalPromptText(approval) {

@@ -1,11 +1,13 @@
 const { spawn } = require("child_process");
 const {
   listenUrl,
+  assertSharedCodexRuntime,
   ensureSharedAppServer,
   resolveBoundThread,
 } = require("./shared-common");
 
 async function main() {
+  assertSharedCodexRuntime();
   const workspaceRoot = process.env.CYBERBOSS_WORKSPACE_ROOT || process.cwd();
   await ensureSharedAppServer();
   const { threadId, workspaceRoot: resolvedWorkspaceRoot } = resolveBoundThread(workspaceRoot);

@@ -13,7 +13,7 @@ const {
 const { SessionStore } = require("./session-store");
 
 function createCodexRuntimeAdapter(config) {
-  const sessionStore = new SessionStore({ filePath: config.sessionsFile });
+  const sessionStore = config.sessionStore || new SessionStore({ filePath: config.sessionsFile });
   let client = null;
   let readyState = null;
 
@@ -68,7 +68,7 @@ function createCodexRuntimeAdapter(config) {
         ? modelResponse.result.data
         : [];
       if (models.length) {
-        sessionStore.setAvailableModelCatalog(models);
+        sessionStore.setAvailableModelCatalog("codex", models);
       }
       readyState = {
         endpoint: config.codexEndpoint || "(spawn)",
@@ -118,6 +118,7 @@ function createCodexRuntimeAdapter(config) {
         text: refreshText,
         model,
         workspaceRoot,
+        accessMode: config.codexAccessMode,
       });
       const result = await completion;
       return { threadId, ...result };
@@ -126,7 +127,7 @@ function createCodexRuntimeAdapter(config) {
       const runtimeClient = ensureClient();
       await this.initialize();
 
-      let threadId = sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot);
+      let threadId = sessionStore.getThreadIdForWorkspace(bindingKey, workspaceRoot, "codex");
       let outboundText = text;
       if (!threadId) {
         const response = await runtimeClient.startThread({ cwd: workspaceRoot });
@@ -134,17 +135,17 @@ function createCodexRuntimeAdapter(config) {
         if (!threadId) {
           throw new Error("thread/start did not return a thread id");
         }
-        sessionStore.setThreadIdForWorkspace(bindingKey, workspaceRoot, threadId, metadata);
+        sessionStore.setThreadIdForWorkspace(bindingKey, workspaceRoot, threadId, metadata, "codex");
         outboundText = buildOpeningTurnText(config, text);
       } else {
         await runtimeClient.resumeThread({ threadId }).catch(async () => {
-          sessionStore.clearThreadIdForWorkspace(bindingKey, workspaceRoot);
+          sessionStore.clearThreadIdForWorkspace(bindingKey, workspaceRoot, "codex");
           const recreated = await runtimeClient.startThread({ cwd: workspaceRoot });
           threadId = extractThreadId(recreated);
           if (!threadId) {
             throw new Error("thread/start did not return a thread id");
           }
-          sessionStore.setThreadIdForWorkspace(bindingKey, workspaceRoot, threadId, metadata);
+          sessionStore.setThreadIdForWorkspace(bindingKey, workspaceRoot, threadId, metadata, "codex");
           outboundText = buildOpeningTurnText(config, text);
         });
       }
@@ -154,6 +155,7 @@ function createCodexRuntimeAdapter(config) {
         text: outboundText,
         model,
         workspaceRoot,
+        accessMode: config.codexAccessMode,
       });
       return { threadId };
     },
@@ -222,6 +224,8 @@ function loadInstructionFile(filePath, config = {}) {
 }
 
 module.exports = { createCodexRuntimeAdapter };
+module.exports.buildOpeningTurnText = buildOpeningTurnText;
+module.exports.buildInstructionRefreshText = buildInstructionRefreshText;
 
 function waitForTurnCompletion(client, threadId) {
   return new Promise((resolve, reject) => {

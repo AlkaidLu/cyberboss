@@ -15,6 +15,16 @@ const appServerLogFile = path.join(logDir, "shared-app-server.log");
 const accountsDir = path.join(stateDir, "accounts");
 const sessionFile = process.env.CYBERBOSS_SESSIONS_FILE || path.join(stateDir, "sessions.json");
 
+function assertSharedCodexRuntime() {
+  const runtime = normalizeText(process.env.CYBERBOSS_RUNTIME || "codex").toLowerCase();
+  if (!runtime || runtime === "codex") {
+    return;
+  }
+  throw new Error(
+    `shared mode currently supports only CYBERBOSS_RUNTIME=codex. Current runtime: ${runtime}. Use \`npm run start\` for claude-code.`
+  );
+}
+
 function ensureLogDir() {
   fs.mkdirSync(logDir, { recursive: true });
 }
@@ -248,6 +258,7 @@ module.exports = {
   readPidFile,
   writePidFile,
   removePidFileIfMatches,
+  assertSharedCodexRuntime,
   ensureSharedAppServer,
   ensureBridgeNotRunning,
   resolveBoundThread,
